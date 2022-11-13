@@ -113,13 +113,14 @@ void draw() {
   } else {
     fill(60, 60, 192, 192);
   }
+  
   rect(0, 0, logoZ, logoZ);
   popMatrix();
   
   // Test if the cursor is over the box 
   if (mouseX > logoX-logoZ && mouseX < logoX+logoZ && 
       mouseY > logoY-logoZ && mouseY < logoY+logoZ) {
-        text("true", width/2, height/2 + 40);
+        // text("true", width/2, height/2 + 40);
     overLogo = true;  
     if(!locked) { 
       stroke(255); 
@@ -129,12 +130,18 @@ void draw() {
     overLogo = false;
   }
   
-  
-
   //===========DRAW EXAMPLE CONTROLS=================
   fill(255);
   scaffoldControlLogic(); //you are going to want to replace this!
   text("Trial " + (trialIndex+1) + " of " +trialCount, width/2, inchToPix(.8f));
+} // end draw
+
+void decreaseSize() {
+  logoZ = constrain(logoZ-inchToPix(.02f), .01, inchToPix(4f)); //leave min and max alone!
+}
+
+void increaseSize() {
+  logoZ = constrain(logoZ+inchToPix(.02f), .01, inchToPix(4f)); //leave min and max alone!
 }
 
 //my example design for control, which is terrible
@@ -143,46 +150,39 @@ void scaffoldControlLogic()
   //upper left corner, rotate counterclockwise
   noFill();
   stroke(255);
-  rect(inchToPix(0.5f), inchToPix(0.5f), inchToPix(0.8f), inchToPix(0.8f));
-  text("CCW", inchToPix(0.5f), inchToPix(0.5f));
   
-  if (mousePressed && dist(inchToPix(0.5f), inchToPix(0.5f), mouseX, mouseY)<inchToPix(0.4f))
+  
+  // rotate counter-clockwise
+  float posXCCW = logoX - (logoZ / 3);
+  float posYCCW = logoY - (logoZ / 3);
+  circle(posXCCW, posYCCW, 20);
+  text("<", posXCCW, posYCCW + 6);
+  if (mousePressed && dist(posXCCW,posYCCW, mouseX, mouseY)<inchToPix(.2f))
     logoRotation--;
 
-  //upper right corner, rotate clockwise
-  rect(inchToPix(0.5f), inchToPix(1.5f), inchToPix(0.8f), inchToPix(0.8f));
-  text("CW", inchToPix(0.5f), inchToPix(1.5f));
-  if (mousePressed && dist(inchToPix(0.5f), inchToPix(1.5f), mouseX, mouseY)<inchToPix(0.4f))
+  // rotate clockwise
+  float posXCW = logoX + (logoZ / 3);
+  float posYCW = logoY - (logoZ / 3);
+  circle(posXCW, posYCW, 20);
+  text(">", posXCW, posYCW + 6);
+  if (mousePressed && dist(posXCW,posYCW, mouseX, mouseY)<inchToPix(.2f))
     logoRotation++;
 
-  //lower left corner, decrease Z
-  rect(inchToPix(0.5f), inchToPix(2.5f), inchToPix(0.8f), inchToPix(0.8f));
-  text("-", inchToPix(0.5f), inchToPix(2.5f));
-  if (mousePressed && dist(inchToPix(0.5f), inchToPix(2.5f), mouseX, mouseY)<inchToPix(0.4f))
-    logoZ = constrain(logoZ-inchToPix(.02f), .01, inchToPix(4f)); //leave min and max alone!
+  // decrease Z
+  float posXMinus = logoX - (logoZ / 3);
+  float posYMinus = logoY + (logoZ / 3);
+  circle(posXMinus, posYMinus, 20);
+  text("-", posXMinus, posYMinus + 6);
+  if (mousePressed && dist(posXMinus,posYMinus, mouseX, mouseY)<inchToPix(.2f))
+    decreaseSize();
 
-  //lower right corner, increase Z
-  rect(inchToPix(0.5f), inchToPix(3.5f), inchToPix(0.8f), inchToPix(0.8f));
-  text("+", inchToPix(0.5f), inchToPix(3.5f));
-  if (mousePressed && dist(inchToPix(0.5f),inchToPix(3.5f), mouseX, mouseY)<inchToPix(.4f))
-    logoZ = constrain(logoZ+inchToPix(.02f), .01, inchToPix(4f)); //leave min and max alone! 
-
-  ////left middle, move left
-  //text("left", inchToPix(.4f), height/2);
-  //if (mousePressed && dist(0, height/2, mouseX, mouseY)<inchToPix(.8f))
-  //  logoX-=inchToPix(.02f);
-
-  //text("right", width-inchToPix(.4f), height/2);
-  //if (mousePressed && dist(width, height/2, mouseX, mouseY)<inchToPix(.8f))
-  //  logoX+=inchToPix(.02f);
-
-  //text("up", width/2, inchToPix(.4f));
-  //if (mousePressed && dist(width/2, 0, mouseX, mouseY)<inchToPix(.8f))
-  //  logoY-=inchToPix(.02f);
-
-  //text("down", width/2, height-inchToPix(.4f));
-  //if (mousePressed && dist(width/2, height, mouseX, mouseY)<inchToPix(.8f))
-  //  logoY+=inchToPix(.02f);
+  // increase Z
+  float posXPlus = logoX + (logoZ / 3);
+  float posYPlus = logoY + (logoZ / 3);
+  circle(posXPlus, posYPlus, 20);
+  text("+", posXPlus, posYPlus + 6);
+  if (mousePressed && dist(posXPlus,posYPlus, mouseX, mouseY)<inchToPix(.2f))
+    increaseSize();
 }
 
 void mousePressed()
