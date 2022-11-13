@@ -118,22 +118,24 @@ void draw() {
   popMatrix();
   
   // Test if the cursor is over the box 
-  if (mouseX > logoX-logoZ && mouseX < logoX+logoZ && 
-      mouseY > logoY-logoZ && mouseY < logoY+logoZ) {
-        // text("true", width/2, height/2 + 40);
-    overLogo = true;  
+  if (mouseX > logoX-logoZ/2 && mouseX < logoX+logoZ/2 && 
+      mouseY > logoY-logoZ/2 && mouseY < logoY+logoZ/2) {
+         //text("true", width/2, height/2 + 40);
+    overLogo = true;
+    cursor(HAND);
     if(!locked) { 
       stroke(255); 
     } 
   } else {
+    cursor(ARROW);
     stroke(153);
     overLogo = false;
   }
   
   //===========DRAW EXAMPLE CONTROLS=================
   fill(255);
-  scaffoldControlLogic(); //you are going to want to replace this!
   text("Trial " + (trialIndex+1) + " of " +trialCount, width/2, inchToPix(.8f));
+  scaffoldControlLogic(); //you are going to want to replace this!
 } // end draw
 
 void decreaseSize() {
@@ -153,36 +155,45 @@ void scaffoldControlLogic()
   
   
   // rotate counter-clockwise
-  float posXCCW = logoX - (logoZ / 3);
-  float posYCCW = logoY - (logoZ / 3);
+  float posXCCW = logoX - (logoZ / 3 + 15);
+  float posYCCW = logoY - (logoZ / 3 + 15);
   circle(posXCCW, posYCCW, 20);
   text("<", posXCCW, posYCCW + 6);
   if (mousePressed && dist(posXCCW,posYCCW, mouseX, mouseY)<inchToPix(.2f))
     logoRotation--;
 
   // rotate clockwise
-  float posXCW = logoX + (logoZ / 3);
-  float posYCW = logoY - (logoZ / 3);
+  float posXCW = logoX + (logoZ / 3 + 15);
+  float posYCW = logoY - (logoZ / 3 + 15);
   circle(posXCW, posYCW, 20);
   text(">", posXCW, posYCW + 6);
   if (mousePressed && dist(posXCW,posYCW, mouseX, mouseY)<inchToPix(.2f))
     logoRotation++;
 
   // decrease Z
-  float posXMinus = logoX - (logoZ / 3);
-  float posYMinus = logoY + (logoZ / 3);
+  float posXMinus = logoX - (logoZ / 3 + 15);
+  float posYMinus = logoY + (logoZ / 3 + 15);
   circle(posXMinus, posYMinus, 20);
   text("-", posXMinus, posYMinus + 6);
-  if (mousePressed && dist(posXMinus,posYMinus, mouseX, mouseY)<inchToPix(.2f))
+  if (mousePressed && dist(posXMinus,posYMinus, mouseX, mouseY)<inchToPix(.2f)){
     decreaseSize();
+    mouseX = (int)posXMinus;
+    mouseY = (int)posYMinus;
+  }
 
   // increase Z
-  float posXPlus = logoX + (logoZ / 3);
-  float posYPlus = logoY + (logoZ / 3);
+  float posXPlus = logoX + (logoZ / 3 + 15);
+  float posYPlus = logoY + (logoZ / 3 + 15);
+  //translate(logoX, logoY);
+  //rotate(radians(logoRotation));
   circle(posXPlus, posYPlus, 20);
   text("+", posXPlus, posYPlus + 6);
-  if (mousePressed && dist(posXPlus,posYPlus, mouseX, mouseY)<inchToPix(.2f))
+  if (mousePressed && dist(posXPlus, posYPlus, mouseX, mouseY)<inchToPix(.2f)){
+    text("true", 0, 0);
     increaseSize();
+    mouseX = (int)posXPlus;
+    mouseY = (int)posYPlus;
+  }
 }
 
 void mousePressed()
